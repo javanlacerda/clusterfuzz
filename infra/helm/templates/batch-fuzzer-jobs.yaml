@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: batch-fuzzer-jobs
+  labels:
+  {{- include "common.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 300
+      backoffLimit: 3
+      template:
+        spec:
+          containers:
+          - env:
+            - name: CLUSTERFUZZ_RELEASE
+              value: {{ quote .Values.batchFuzzerJobs.batchFuzzerJobs.env.clusterfuzzRelease
+                }}
+            - name: RUN_CMD
+              value: {{ quote .Values.batchFuzzerJobs.batchFuzzerJobs.env.runCmd
+                }}
+            - name: IS_K8S_ENV
+              value: {{ quote .Values.batchFuzzerJobs.batchFuzzerJobs.env.isK8SEnv
+                }}
+            - name: DISABLE_MOUNTS
+              value: {{ quote .Values.batchFuzzerJobs.batchFuzzerJobs.env.disableMounts
+                }}
+            - name: KUBERNETES_CLUSTER_DOMAIN
+              value: {{ quote .Values.kubernetesClusterDomain }}
+            image: {{ .Values.batchFuzzerJobs.batchFuzzerJobs.image.repository }}:{{
+              .Values.batchFuzzerJobs.batchFuzzerJobs.image.tag | default .Chart.AppVersion
+              }}
+            imagePullPolicy: {{ .Values.batchFuzzerJobs.batchFuzzerJobs.imagePullPolicy
+              }}
+            name: batch-fuzzer-jobs
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: {{ .Values.batchFuzzerJobs.schedule | quote }}

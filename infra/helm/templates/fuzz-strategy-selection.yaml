@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fuzz-strategy-selection
+  labels:
+  {{- include "common.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 300
+      backoffLimit: 3
+      template:
+        spec:
+          containers:
+          - env:
+            - name: CLUSTERFUZZ_RELEASE
+              value: {{ quote .Values.fuzzStrategySelection.fuzzStrategySelection.env.clusterfuzzRelease
+                }}
+            - name: RUN_CMD
+              value: {{ quote .Values.fuzzStrategySelection.fuzzStrategySelection.env.runCmd
+                }}
+            - name: IS_K8S_ENV
+              value: {{ quote .Values.fuzzStrategySelection.fuzzStrategySelection.env.isK8SEnv
+                }}
+            - name: DISABLE_MOUNTS
+              value: {{ quote .Values.fuzzStrategySelection.fuzzStrategySelection.env.disableMounts
+                }}
+            - name: KUBERNETES_CLUSTER_DOMAIN
+              value: {{ quote .Values.kubernetesClusterDomain }}
+            image: {{ .Values.fuzzStrategySelection.fuzzStrategySelection.image.repository
+              }}:{{ .Values.fuzzStrategySelection.fuzzStrategySelection.image.tag
+              | default .Chart.AppVersion }}
+            imagePullPolicy: {{ .Values.fuzzStrategySelection.fuzzStrategySelection.imagePullPolicy
+              }}
+            name: fuzz-strategy-selection
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: {{ .Values.fuzzStrategySelection.schedule | quote }}

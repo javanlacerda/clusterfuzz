@@ -1,0 +1,133 @@
+backup:
+  backup:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py backup
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: 47 1 * * *
+batchFuzzerJobs:
+  batchFuzzerJobs:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py batch_fuzzer_jobs
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: '*/30 * * * *'
+buildCrashStats:
+  buildCrashStats:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py build_crash_stats
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: '*/5 * * * *'
+cheduleCorpusPruning:
+  schedule: 0 7,19 * * *
+  scheduleCorpusPruning:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py schedule_corpus_pruning
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+cheduleFuzz:
+  backup:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py schedule_fuzz
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: '*/10 * * * *'
+cheduleProgressionTasks:
+  schedule: 0 7 * * *
+  scheduleProgressionTasks:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py schedule_progression_tasks
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+fuzzStrategySelection:
+  fuzzStrategySelection:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py fuzz_strategy_selection
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: 0 5 * * *
+fuzzerAndJobWeights:
+  fuzzerAndJobWeights:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py fuzzer_and_job_weights
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: 0 3 * * *
+kubernetesClusterDomain: cluster.local
+loadBigqueryStats:
+  loadBigqueryStats:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py load_bigquery_stats
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: 0 1 * * *
+manageVms:
+  manageVms:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py manage_vms
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always
+  schedule: '*/30 * * * *'
+yncAdmins:
+  schedule: 0 * * * *
+  syncAdmins:
+    env:
+      clusterfuzzRelease: prod
+      disableMounts: "true"
+      isK8SEnv: "true"
+      runCmd: python3.11 $ROOT_DIR/src/python/bot/startup/run_cron.py sync_admins
+    image:
+      repository: gcr.io/clusterfuzz-images/base
+      tag: 091c6c2-202409251610
+    imagePullPolicy: Always

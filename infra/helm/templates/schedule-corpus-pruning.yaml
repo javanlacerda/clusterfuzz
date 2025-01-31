@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: schedule-corpus-pruning
+  labels:
+  {{- include "common.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 7200
+      backoffLimit: 3
+      template:
+        spec:
+          containers:
+          - env:
+            - name: CLUSTERFUZZ_RELEASE
+              value: {{ quote .Values.cheduleCorpusPruning.scheduleCorpusPruning.env.clusterfuzzRelease
+                }}
+            - name: RUN_CMD
+              value: {{ quote .Values.cheduleCorpusPruning.scheduleCorpusPruning.env.runCmd
+                }}
+            - name: IS_K8S_ENV
+              value: {{ quote .Values.cheduleCorpusPruning.scheduleCorpusPruning.env.isK8SEnv
+                }}
+            - name: DISABLE_MOUNTS
+              value: {{ quote .Values.cheduleCorpusPruning.scheduleCorpusPruning.env.disableMounts
+                }}
+            - name: KUBERNETES_CLUSTER_DOMAIN
+              value: {{ quote .Values.kubernetesClusterDomain }}
+            image: {{ .Values.cheduleCorpusPruning.scheduleCorpusPruning.image.repository
+              }}:{{ .Values.cheduleCorpusPruning.scheduleCorpusPruning.image.tag |
+              default .Chart.AppVersion }}
+            imagePullPolicy: {{ .Values.cheduleCorpusPruning.scheduleCorpusPruning.imagePullPolicy
+              }}
+            name: schedule-corpus-pruning
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: {{ .Values.cheduleCorpusPruning.schedule | quote }}
