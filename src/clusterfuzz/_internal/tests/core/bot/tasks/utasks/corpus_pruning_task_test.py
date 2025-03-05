@@ -67,11 +67,11 @@ class BaseTest:
         'clusterfuzz._internal.fuzzing.corpus_manager.FuzzTargetCorpus.rsync_to_disk',
         ('proto_rsync_to_disk',
          'clusterfuzz._internal.fuzzing.corpus_manager.ProtoFuzzTargetCorpus.rsync_to_disk'
-        ),
+         ),
         'clusterfuzz._internal.fuzzing.corpus_manager.FuzzTargetCorpus.rsync_from_disk',
         ('proto_rsync_from_disk',
          'clusterfuzz._internal.fuzzing.corpus_manager.ProtoFuzzTargetCorpus.rsync_from_disk'
-        ),
+         ),
         'clusterfuzz.fuzz.engine.get',
     ])
     self.mock.get.return_value = libFuzzer_engine.Engine()
@@ -251,35 +251,23 @@ class CorpusPruningTest(unittest.TestCase, BaseTest):
     self.assertDictEqual(
         {
             'corpus_backup_location':
-                uworker_input.corpus_pruning_task_input.dated_backup_gcs_url,
-            'corpus_location':
-                'gs://bucket/libFuzzer/test_fuzzer/',
-            'corpus_size_bytes':
-                4,
-            'corpus_size_units':
-                2,
-            'date':
-                today,
+            uworker_input.corpus_pruning_task_input.dated_backup_gcs_url,
+            'corpus_location': 'gs://bucket/libFuzzer/test_fuzzer/',
+            'corpus_size_bytes': 4,
+            'corpus_size_units': 2,
+            'date': today,
             # Coverage numbers are expected to be None as they come from fuzzer
             # coverage cron task (see src/go/server/cron/coverage.go).
-            'edges_covered':
-                None,
-            'edges_total':
-                None,
-            'functions_covered':
-                None,
-            'functions_total':
-                None,
-            'fuzzer':
-                'test_fuzzer',
-            'html_report_url':
-                None,
+            'edges_covered': None,
+            'edges_total': None,
+            'functions_covered': None,
+            'functions_total': None,
+            'fuzzer': 'test_fuzzer',
+            'html_report_url': None,
             'quarantine_location':
-                'gs://bucket-quarantine/libFuzzer/test_fuzzer/',
-            'quarantine_size_bytes':
-                2,
-            'quarantine_size_units':
-                1,
+            'gs://bucket-quarantine/libFuzzer/test_fuzzer/',
+            'quarantine_size_bytes': 2,
+            'quarantine_size_units': 1,
         },
         coverage_info.to_dict())
 
@@ -528,33 +516,22 @@ class CorpusPruningTestUntrusted(
     self.assertDictEqual(
         {
             'corpus_location':
-                f'gs://{self.corpus_bucket}/libFuzzer/test_fuzzer/',
-            'corpus_size_bytes':
-                8,
-            'corpus_size_units':
-                4,
-            'date':
-                today,
+            f'gs://{self.corpus_bucket}/libFuzzer/test_fuzzer/',
+            'corpus_size_bytes': 8,
+            'corpus_size_units': 4,
+            'date': today,
             # Coverage numbers are expected to be None as they come from fuzzer
             # coverage cron task (see src/go/server/cron/coverage.go).
-            'edges_covered':
-                None,
-            'edges_total':
-                None,
-            'functions_covered':
-                None,
-            'functions_total':
-                None,
-            'fuzzer':
-                'test_fuzzer',
-            'html_report_url':
-                None,
+            'edges_covered': None,
+            'edges_total': None,
+            'functions_covered': None,
+            'functions_total': None,
+            'fuzzer': 'test_fuzzer',
+            'html_report_url': None,
             'quarantine_location':
-                f'gs://{self.quarantine_bucket}/libFuzzer/test_fuzzer/',
-            'quarantine_size_bytes':
-                2,
-            'quarantine_size_units':
-                1,
+            f'gs://{self.quarantine_bucket}/libFuzzer/test_fuzzer/',
+            'quarantine_size_bytes': 2,
+            'quarantine_size_units': 1,
         },
         coverage_info_without_backup)
 

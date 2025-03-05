@@ -129,8 +129,8 @@ def _limit_corpus_size(corpus_url):
   for corpus_file in storage.get_blobs(corpus_url):
     corpus_count += 1
     corpus_size += corpus_file['size']
-    if (corpus_count > CORPUS_FILES_LIMIT_FOR_FAILURES or
-        corpus_size > CORPUS_SIZE_LIMIT_FOR_FAILURES):
+    if (corpus_count > CORPUS_FILES_LIMIT_FOR_FAILURES
+        or corpus_size > CORPUS_SIZE_LIMIT_FOR_FAILURES):
       path_to_delete = storage.get_cloud_storage_file_path(
           bucket, corpus_file['name'])
       storage.delete(path_to_delete)
@@ -1075,8 +1075,8 @@ def utask_preprocess(fuzzer_name, job_type, uworker_env):
   # Get status of last execution.
   last_execution_metadata = data_handler.get_task_status(task_name)
   last_execution_failed = bool(
-      last_execution_metadata and
-      last_execution_metadata.status == data_types.TaskState.ERROR)
+      last_execution_metadata
+      and last_execution_metadata.status == data_types.TaskState.ERROR)
 
   # Make sure we're the only instance running for the given fuzzer and
   # job_type.
@@ -1132,12 +1132,13 @@ def utask_preprocess(fuzzer_name, job_type, uworker_env):
       corpus_pruning_task_input=corpus_pruning_task_input)
 
 
-_ERROR_HANDLER = uworker_handle_errors.CompositeErrorHandler({
-    uworker_msg_pb2.ErrorType.CORPUS_PRUNING_FUZZER_SETUP_FAILED:  # pylint: disable=no-member
+_ERROR_HANDLER = uworker_handle_errors.CompositeErrorHandler(
+    {
+        uworker_msg_pb2.ErrorType.CORPUS_PRUNING_FUZZER_SETUP_FAILED:  # pylint: disable=no-member
         uworker_handle_errors.noop_handler,
-    uworker_msg_pb2.ErrorType.CORPUS_PRUNING_ERROR:  # pylint: disable=no-member
+        uworker_msg_pb2.ErrorType.CORPUS_PRUNING_ERROR:  # pylint: disable=no-member
         handle_corpus_pruning_failures,
-})
+    })
 
 
 def _update_latest_backup(output):

@@ -564,8 +564,7 @@ class Engine(engine.Engine):
       return None
 
     testcases = [
-        os.path.join(crashes_path, t)
-        for t in os.listdir(crashes_path)
+        os.path.join(crashes_path, t) for t in os.listdir(crashes_path)
         if os.path.isfile(os.path.join(crashes_path, t))
     ]
     if not testcases:
