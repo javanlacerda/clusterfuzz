@@ -41,8 +41,8 @@ from clusterfuzz._internal.tests.test_libs import helpers
 from clusterfuzz._internal.tests.test_libs import test_utils
 from clusterfuzz._internal.tests.test_libs import untrusted_runner_helpers
 
-TEST_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                        'corpus_pruning_task_data')
+TEST_DIR = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), 'corpus_pruning_task_data')
 
 TEST_GLOBAL_BUCKET = 'clusterfuzz-test-global-bundle'
 TEST2_BACKUP_BUCKET = 'clusterfuzz-test2-backup-bucket'
@@ -67,11 +67,11 @@ class BaseTest:
         'clusterfuzz._internal.fuzzing.corpus_manager.FuzzTargetCorpus.rsync_to_disk',
         ('proto_rsync_to_disk',
          'clusterfuzz._internal.fuzzing.corpus_manager.ProtoFuzzTargetCorpus.rsync_to_disk'
-         ),
+        ),
         'clusterfuzz._internal.fuzzing.corpus_manager.FuzzTargetCorpus.rsync_from_disk',
         ('proto_rsync_from_disk',
          'clusterfuzz._internal.fuzzing.corpus_manager.ProtoFuzzTargetCorpus.rsync_from_disk'
-         ),
+        ),
         'clusterfuzz.fuzz.engine.get',
     ])
     self.mock.get.return_value = libFuzzer_engine.Engine()
@@ -94,12 +94,12 @@ class BaseTest:
     self.mock.unpack_seed_corpus_if_needed.side_effect = (
         mocked_unpack_seed_corpus_if_needed)
 
-    data_types.FuzzTarget(engine='libFuzzer',
-                          binary='test_fuzzer',
-                          project='test-project').put()
-    data_types.FuzzTargetJob(fuzz_target_name='libFuzzer_test_fuzzer',
-                             engine='libFuzzer',
-                             job='libfuzzer_asan_job').put()
+    data_types.FuzzTarget(
+        engine='libFuzzer', binary='test_fuzzer', project='test-project').put()
+    data_types.FuzzTargetJob(
+        fuzz_target_name='libFuzzer_test_fuzzer',
+        engine='libFuzzer',
+        job='libfuzzer_asan_job').put()
 
     self.fuzz_inputs_disk = tempfile.mkdtemp()
     self.bot_tmpdir = tempfile.mkdtemp()
@@ -251,23 +251,35 @@ class CorpusPruningTest(unittest.TestCase, BaseTest):
     self.assertDictEqual(
         {
             'corpus_backup_location':
-            uworker_input.corpus_pruning_task_input.dated_backup_gcs_url,
-            'corpus_location': 'gs://bucket/libFuzzer/test_fuzzer/',
-            'corpus_size_bytes': 4,
-            'corpus_size_units': 2,
-            'date': today,
+                uworker_input.corpus_pruning_task_input.dated_backup_gcs_url,
+            'corpus_location':
+                'gs://bucket/libFuzzer/test_fuzzer/',
+            'corpus_size_bytes':
+                4,
+            'corpus_size_units':
+                2,
+            'date':
+                today,
             # Coverage numbers are expected to be None as they come from fuzzer
             # coverage cron task (see src/go/server/cron/coverage.go).
-            'edges_covered': None,
-            'edges_total': None,
-            'functions_covered': None,
-            'functions_total': None,
-            'fuzzer': 'test_fuzzer',
-            'html_report_url': None,
+            'edges_covered':
+                None,
+            'edges_total':
+                None,
+            'functions_covered':
+                None,
+            'functions_total':
+                None,
+            'fuzzer':
+                'test_fuzzer',
+            'html_report_url':
+                None,
             'quarantine_location':
-            'gs://bucket-quarantine/libFuzzer/test_fuzzer/',
-            'quarantine_size_bytes': 2,
-            'quarantine_size_units': 1,
+                'gs://bucket-quarantine/libFuzzer/test_fuzzer/',
+            'quarantine_size_bytes':
+                2,
+            'quarantine_size_units':
+                1,
         },
         coverage_info.to_dict())
 
@@ -336,12 +348,14 @@ class CorpusPruningTestFuchsia(unittest.TestCase, BaseTest):
                   'fuchsia-([0-9]+).zip')
     commands.update_environment_for_job(env_string)
 
-    data_types.Job(name='libfuzzer_asan_fuchsia',
-                   platform='FUCHSIA',
-                   environment_string=env_string).put()
-    data_types.FuzzTarget(binary='example-fuzzers/crash_fuzzer',
-                          engine='libFuzzer',
-                          project='fuchsia').put()
+    data_types.Job(
+        name='libfuzzer_asan_fuchsia',
+        platform='FUCHSIA',
+        environment_string=env_string).put()
+    data_types.FuzzTarget(
+        binary='example-fuzzers/crash_fuzzer',
+        engine='libFuzzer',
+        project='fuchsia').put()
 
     environment.set_value('UNPACK_ALL_FUZZ_TARGETS_AND_FILES', True)
     helpers.patch(self, [
@@ -415,42 +429,43 @@ class CorpusPruningTestUntrusted(
     job.put()
 
     os.environ['PROJECT_NAME'] = 'oss-fuzz'
-    data_types.FuzzTarget(engine='libFuzzer',
-                          project='test',
-                          binary='test_fuzzer').put()
-    data_types.FuzzTargetJob(fuzz_target_name='libFuzzer_test_fuzzer',
-                             engine='libFuzzer',
-                             job='libfuzzer_asan_job',
-                             last_run=datetime.datetime.now()).put()
+    data_types.FuzzTarget(
+        engine='libFuzzer', project='test', binary='test_fuzzer').put()
+    data_types.FuzzTargetJob(
+        fuzz_target_name='libFuzzer_test_fuzzer',
+        engine='libFuzzer',
+        job='libfuzzer_asan_job',
+        last_run=datetime.datetime.now()).put()
 
-    data_types.FuzzTarget(engine='libFuzzer', project='test2',
-                          binary='fuzzer').put()
-    data_types.FuzzTargetJob(fuzz_target_name='libFuzzer_test2_fuzzer',
-                             engine='libFuzzer',
-                             job='libfuzzer_asan_job2',
-                             last_run=datetime.datetime.now()).put()
+    data_types.FuzzTarget(
+        engine='libFuzzer', project='test2', binary='fuzzer').put()
+    data_types.FuzzTargetJob(
+        fuzz_target_name='libFuzzer_test2_fuzzer',
+        engine='libFuzzer',
+        job='libfuzzer_asan_job2',
+        last_run=datetime.datetime.now()).put()
 
     # Set up remote corpora.
     self.corpus = corpus_manager.FuzzTargetCorpus('libFuzzer', 'test_fuzzer')
     self.corpus.rsync_from_disk(os.path.join(TEST_DIR, 'corpus'), delete=True)
 
-    self.quarantine_corpus = corpus_manager.FuzzTargetCorpus('libFuzzer',
-                                                             'test_fuzzer',
-                                                             quarantine=True)
-    self.quarantine_corpus.rsync_from_disk(os.path.join(TEST_DIR, 'quarantine'),
-                                           delete=True)
+    self.quarantine_corpus = corpus_manager.FuzzTargetCorpus(
+        'libFuzzer', 'test_fuzzer', quarantine=True)
+    self.quarantine_corpus.rsync_from_disk(
+        os.path.join(TEST_DIR, 'quarantine'), delete=True)
 
-    data_types.DataBundle(name='bundle',
-                          bundle_name=TEST_GLOBAL_BUCKET,
-                          sync_to_worker=True).put()
+    data_types.DataBundle(
+        name='bundle', bundle_name=TEST_GLOBAL_BUCKET,
+        sync_to_worker=True).put()
 
-    self.fuzzer = data_types.Fuzzer(revision=1,
-                                    file_size='builtin',
-                                    source='builtin',
-                                    name='libFuzzer',
-                                    max_testcases=4,
-                                    builtin=True,
-                                    data_bundle_name='bundle')
+    self.fuzzer = data_types.Fuzzer(
+        revision=1,
+        file_size='builtin',
+        source='builtin',
+        name='libFuzzer',
+        max_testcases=4,
+        builtin=True,
+        data_bundle_name='bundle')
     self.fuzzer.put()
 
     self.temp_dir = tempfile.mkdtemp()
@@ -516,22 +531,33 @@ class CorpusPruningTestUntrusted(
     self.assertDictEqual(
         {
             'corpus_location':
-            f'gs://{self.corpus_bucket}/libFuzzer/test_fuzzer/',
-            'corpus_size_bytes': 8,
-            'corpus_size_units': 4,
-            'date': today,
+                f'gs://{self.corpus_bucket}/libFuzzer/test_fuzzer/',
+            'corpus_size_bytes':
+                8,
+            'corpus_size_units':
+                4,
+            'date':
+                today,
             # Coverage numbers are expected to be None as they come from fuzzer
             # coverage cron task (see src/go/server/cron/coverage.go).
-            'edges_covered': None,
-            'edges_total': None,
-            'functions_covered': None,
-            'functions_total': None,
-            'fuzzer': 'test_fuzzer',
-            'html_report_url': None,
+            'edges_covered':
+                None,
+            'edges_total':
+                None,
+            'functions_covered':
+                None,
+            'functions_total':
+                None,
+            'fuzzer':
+                'test_fuzzer',
+            'html_report_url':
+                None,
             'quarantine_location':
-            f'gs://{self.quarantine_bucket}/libFuzzer/test_fuzzer/',
-            'quarantine_size_bytes': 2,
-            'quarantine_size_units': 1,
+                f'gs://{self.quarantine_bucket}/libFuzzer/test_fuzzer/',
+            'quarantine_size_bytes':
+                2,
+            'quarantine_size_units':
+                1,
         },
         coverage_info_without_backup)
 
@@ -590,24 +616,26 @@ class CrashProcessingTest(unittest.TestCase, BaseTest):
     with open(unit1_path, 'w') as f:
       f.write('unit1_contents')
 
-    crash1 = uworker_msg_pb2.CrashInfo(crash_state='crash_state1',
-                                       crash_type='crash_type1',
-                                       crash_address='crash_address1',
-                                       crash_stacktrace='crash_stacktrace1',
-                                       unit_path=unit1_path,
-                                       security_flag=False)
+    crash1 = uworker_msg_pb2.CrashInfo(
+        crash_state='crash_state1',
+        crash_type='crash_type1',
+        crash_address='crash_address1',
+        crash_stacktrace='crash_stacktrace1',
+        unit_path=unit1_path,
+        security_flag=False)
 
     os.makedirs('c/d')
     unit2_path = 'c/d/unit2'
     with open(unit2_path, 'w') as f:
       f.write('unit2_contents')
 
-    crash2 = uworker_msg_pb2.CrashInfo(crash_state='crash_state2',
-                                       crash_type='crash_type2',
-                                       crash_address='crash_address2',
-                                       crash_stacktrace='crash_stacktrace2',
-                                       unit_path=unit2_path,
-                                       security_flag=False)
+    crash2 = uworker_msg_pb2.CrashInfo(
+        crash_state='crash_state2',
+        crash_type='crash_type2',
+        crash_address='crash_address2',
+        crash_stacktrace='crash_stacktrace2',
+        unit_path=unit2_path,
+        security_flag=False)
 
     result = corpus_pruning_task.CorpusPruningResult(
         coverage_info=None,
@@ -622,8 +650,9 @@ class CrashProcessingTest(unittest.TestCase, BaseTest):
 
     corpus_crashes_zip_local_path = os.path.join(
         self.temp_dir, f'{self.corpus_crashes_blob_name}.zip')
-    storage.copy_file_from(blobs.get_gcs_path(self.corpus_crashes_blob_name),
-                           corpus_crashes_zip_local_path)
+    storage.copy_file_from(
+        blobs.get_gcs_path(self.corpus_crashes_blob_name),
+        corpus_crashes_zip_local_path)
 
     with archive.open(corpus_crashes_zip_local_path) as zip_reader:
       members = zip_reader.list_members()

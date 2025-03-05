@@ -304,8 +304,8 @@ class Engine(engine.Engine):
     old_corpus_len = shell.get_directory_file_count(options.corpus_dir)
     logs.info(f'Corpus length before fuzzing: {old_corpus_len}')
 
-    fuzz_result = runner.run_and_wait(additional_args=options.arguments,
-                                      timeout=timeout)
+    fuzz_result = runner.run_and_wait(
+        additional_args=options.arguments, timeout=timeout)
     log_lines = fuzz_result.output.splitlines()
     fuzz_result.output = Engine.trim_logs(fuzz_result.output)
 
@@ -340,8 +340,9 @@ class Engine(engine.Engine):
     crashes = []
     if reproducer_path:
       crashes.append(
-          engine.Crash(str(reproducer_path), fuzz_result.output, [],
-                       int(fuzz_result.time_executed)))
+          engine.Crash(
+              str(reproducer_path), fuzz_result.output, [],
+              int(fuzz_result.time_executed)))
 
     stats_filename = f'fuzzing-stats-{os.path.basename(target_path)}.000000.csv'
 
@@ -411,8 +412,8 @@ class Engine(engine.Engine):
 
     if environment.get_value('FUZZTEST_MODE'):
       runner = new_process.UnicodeProcessRunner(sanitized_target)
-      result = runner.run_and_wait(timeout=max_time,
-                                   extra_env={'FUZZTEST_REPLAY': input_path})
+      result = runner.run_and_wait(
+          timeout=max_time, extra_env={'FUZZTEST_REPLAY': input_path})
     else:
       runner = new_process.UnicodeProcessRunner(sanitized_target, [input_path])
       result = runner.run_and_wait(timeout=max_time)
@@ -506,8 +507,9 @@ class Engine(engine.Engine):
     max_time -= result.time_executed
 
     if result.timed_out or max_time < 0:
-      logs.warning('Corpus minimization timed out: Failed to distill',
-                   fuzzer_output=result.output)
+      logs.warning(
+          'Corpus minimization timed out: Failed to distill',
+          fuzzer_output=result.output)
       raise TimeoutError('Minimization corpus timed out.')
 
     # Step 3: Generate corpus files for output_dir.
@@ -564,7 +566,8 @@ class Engine(engine.Engine):
       return None
 
     testcases = [
-        os.path.join(crashes_path, t) for t in os.listdir(crashes_path)
+        os.path.join(crashes_path, t)
+        for t in os.listdir(crashes_path)
         if os.path.isfile(os.path.join(crashes_path, t))
     ]
     if not testcases:
@@ -599,8 +602,8 @@ class Engine(engine.Engine):
     ]
     result = runner.run_and_wait(additional_args=args, timeout=max_time)
     if result.timed_out:
-      logs.warning('Testcase minimization timed out.',
-                   fuzzer_output=result.output)
+      logs.warning(
+          'Testcase minimization timed out.', fuzzer_output=result.output)
       raise TimeoutError('Minimization timed out.')
     minimum_testcase = self._get_smallest_crasher(workdir)
     if minimum_testcase:
