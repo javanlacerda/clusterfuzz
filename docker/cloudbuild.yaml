@@ -17,7 +17,7 @@ steps:
   entrypoint: bash
   args:
   - -ex
-  - build.sh
+  - docker/build.sh
   - ${_GIT_HASH}
 timeout: 14400s
 options:
