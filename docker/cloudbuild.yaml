@@ -23,3 +23,5 @@ timeout: 14400s
 options:
   machineType: E2_HIGHCPU_32
   diskSizeGb: 500
+
+logsBucket: "gs://builds-logs"
