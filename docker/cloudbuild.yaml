@@ -19,6 +19,7 @@ steps:
   - cp 
   - Pipfile*
   - docker/.
+  - &&
   - ex
   - docker/build.sh
   - ${_GIT_HASH}
