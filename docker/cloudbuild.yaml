@@ -17,7 +17,7 @@ steps:
   entrypoint: bash
   args:
   - -c
-  - cp Pipfile* docker/.
+  - cp Pipfile* docker/base/.
 - name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args:
