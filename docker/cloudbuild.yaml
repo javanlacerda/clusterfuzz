@@ -13,14 +13,15 @@
 # limitations under the License.
 
 steps:
+- name: ubuntu
+  entrypoint: bash
+  args:
+  - -c
+  - cp Pipfile* docker/.
 - name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args:
-  - cp 
-  - Pipfile*
-  - docker/.
-  - &&
-  - ex
+  - -ex
   - docker/build.sh
   - ${_GIT_HASH}
 timeout: 14400s
