@@ -29,4 +29,4 @@ options:
   machineType: E2_HIGHCPU_32
   diskSizeGb: 500
 
-logsBucket: "gs://builds-logs-test"
+logsBucket: "gs://builds-logs-test-1"
