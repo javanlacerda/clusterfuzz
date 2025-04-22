@@ -35,6 +35,7 @@ steps:
   args:
   - -c
   - |
+    sudo apt install git -y
     CLUSTERFUZZ_HASH=$$(git rev-parse HEAD)
     CLUSERFUZZ_CONFIG_HASH=$$(git -C /workflows/clusterfuzz-config rev-parse HEAD)
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
