@@ -30,7 +30,7 @@ steps:
     CONFIG_DIR_OVERRIDE=/workspace/clusterfuzz-config python3.11 butler.py package --platform=all
     mkdir /workspace/zips
     cp -r deployment/* /workspace/zips/.
-- name: ubuntu
+- name: gcr.io/clusterfuzz-images/base
   entrypoint: bash
   args:
   - -c
