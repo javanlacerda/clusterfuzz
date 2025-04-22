@@ -27,6 +27,7 @@ steps:
   - |
     bash ./local/install_deps.bash
     source "$$(python3.11 -m pipenv --venv)/bin/activate"
+    git add clusterfuzz-config
     CONFIG_DIR_OVERRIDE=/workspace/clusterfuzz-config python3.11 butler.py package --platform=all
     mkdir /workspace/zips
     cp -r deployment/* /workspace/zips/.
