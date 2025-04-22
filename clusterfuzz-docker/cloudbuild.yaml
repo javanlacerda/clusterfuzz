@@ -13,15 +13,14 @@
 # limitations under the License.
 
 steps:
-- name: ubuntu
+- name: gcr.io/clusterfuzz-images/base
   entrypoint: bash
   args:
   - -c
   - |
-    sudo apt install
-    sudo apt upgrade -y
-    sudo apt install python3.11.9
-    bash ./local/install_deps.bash
+    python butler.py package --platform=all
+    mkdir /workspace/zips
+    cp -r deployment/* /workspace/zips/.
 - name: ubuntu
   entrypoint: bash
   args:
