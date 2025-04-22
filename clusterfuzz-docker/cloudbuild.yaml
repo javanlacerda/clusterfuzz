@@ -18,6 +18,9 @@ steps:
   args:
   - -c
   - |
+    sudo apt install
+    sudo apt upgrade -y
+    sudo apt install python3.11.9
     bash ./local/install_deps.bash
 - name: ubuntu
   entrypoint: bash
