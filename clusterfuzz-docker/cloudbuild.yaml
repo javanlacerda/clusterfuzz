@@ -18,7 +18,7 @@ steps:
   args:
   - -c
   - |
-    python butler.py package --platform=all
+    python3.11 butler.py package --platform=all
     mkdir /workspace/zips
     cp -r deployment/* /workspace/zips/.
 - name: ubuntu
