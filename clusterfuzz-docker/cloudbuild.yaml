@@ -20,7 +20,7 @@ steps:
   - |
     bash ./local/install_deps.bash
     source "$$(python3.11 -m pipenv --venv)/bin/activate"
-    git config --global credential.'https://*.*.sourcemanager.dev'.helper gcloud.sh
+    git config --global credential.helper gcloud.sh
     git clone https://clusterfuzz-config-472119376969-git.us-central1.sourcemanager.dev/clusterfuzz-testing/clusterfuzz-config.git /workspace/clusterfuzz-config
     CONFIG_DIR_OVERRIDE=/workspace/clusterfuzz-config python3.11 butler.py package --platform=all
     mkdir /workspace/zips
