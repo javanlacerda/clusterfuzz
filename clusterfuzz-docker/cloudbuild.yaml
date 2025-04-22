@@ -18,7 +18,6 @@ steps:
   args:
   - -c
   - |
-    bash ./local/install_deps.bash
     python3.11 -m pipenv shell
     python3.11 butler.py package --platform=all
     mkdir /workspace/zips
