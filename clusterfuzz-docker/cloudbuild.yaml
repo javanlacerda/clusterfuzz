@@ -18,6 +18,8 @@ steps:
   args:
   - -c
   - |
+    bash ./local/install_deps.bash
+    pipenv shell
     python butler.py package --platform=all
     mkdir /workspace/zips
     cp -r deployment/* /workspace/zips/.
