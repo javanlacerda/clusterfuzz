@@ -13,18 +13,12 @@
 # limitations under the License.
 
 steps:
-- name: python:3.11
+- name: ubuntu
   entrypoint: bash
   args:
   - -c
   - |
-    pip install pipenv
-    python -m pipenv --python python
-    python -m pipenv sync --dev
-    source "$$(python -m pipenv --venv)/bin/activate"
-    python butler.py package --platform=all
-    mkdir /workspace/zips
-    cp -r deployment/* /workspace/zips/.
+    bash ./local/install_deps.bash
 - name: ubuntu
   entrypoint: bash
   args:
