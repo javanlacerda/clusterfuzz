@@ -37,10 +37,10 @@ steps:
   - |
     sudo apt install git -y
     CLUSTERFUZZ_HASH=$$(git rev-parse HEAD)
-    CLUSERFUZZ_CONFIG_HASH=$$(git -C /workflows/clusterfuzz-config rev-parse HEAD)
+    CLUSERFUZZ_CONFIG_HASH=$$(git -C /workspace/clusterfuzz-config rev-parse HEAD)
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
     echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
-    for zipfile in /workflows/zips/*; do
+    for zipfile in /workspace/zips/*; do
       filename=$(basename "$zipfile")
       echo "$${zipfile} and $${filename}"
       gsutil cp $${zipfile} gs://immutable-artifacts//$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}//$${filename}
