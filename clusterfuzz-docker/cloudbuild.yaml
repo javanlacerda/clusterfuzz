@@ -18,8 +18,10 @@ steps:
   args:
   - -c
   - |
-    bash ./local/install_deps.bash
-    pipenv shell
+    pip install pipenv
+    python -m pipenv --python python
+    python -m pipenv sync --dev
+    source "$$(python -m pipenv --venv)/bin/activate"
     python butler.py package --platform=all
     mkdir /workspace/zips
     cp -r deployment/* /workspace/zips/.
