@@ -47,11 +47,12 @@ steps:
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
     echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
     for project in /workspace/zips/*; do
-      for zipfile in /workspace/zips/$${project}/*; do
+      projectbase=$(basename $${project})
+      for zipfile in $${project}/*; do
         filename=$(basename "$zipfile")
         echo "$${zipfile} and $${filename}"
-        echo "Running: gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${project}/$${filename}"
-        gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${project}/$${filename}
+        echo "Running: gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${projectbase}/$${filename}"
+        gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${projectbase}/$${filename}
         echo "uploaded.."
       done
     done
