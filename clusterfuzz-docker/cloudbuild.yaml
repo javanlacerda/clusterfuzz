@@ -29,6 +29,8 @@ steps:
     source "$$(python3.11 -m pipenv --venv)/bin/activate"
     mkdir /workspace/zips
     echo "/zips" >> .gitignore
+    git add .gitignore
+    git commit -m "avoid branch is dirty error"
     for configpath in /workspace/clusterfuzz-config/configs/*; do
       configbase=$(basename "$configpath")
       echo "Running: CONFIG_DIR_OVERRIDE=$${configpath} python3.11 butler.py package --platform=all"
