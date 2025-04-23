@@ -43,7 +43,8 @@ steps:
     for zipfile in /workspace/zips/*; do
       filename=$(basename "$zipfile")
       echo "$${zipfile} and $${filename}"
-      gsutil cp $${zipfile} gs:/immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${filename}
+      echo "gsutil cp $${zipfile} gs:/immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${filename}"
+      gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${filename}
       echo "uploaded.."
     done
     
