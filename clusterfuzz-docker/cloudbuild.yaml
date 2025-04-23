@@ -28,6 +28,7 @@ steps:
     bash ./local/install_deps.bash
     source "$$(python3.11 -m pipenv --venv)/bin/activate"
     mkdir /workspace/zips
+    echo "/zips" >> .gitignore
     for configpath in /workspace/clusterfuzz-config/configs/*; do
       configbase=$(basename "$configpath")
       echo "Running: CONFIG_DIR_OVERRIDE=$${configpath} python3.11 butler.py package --platform=all"
