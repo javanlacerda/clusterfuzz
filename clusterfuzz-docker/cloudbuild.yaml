@@ -27,9 +27,15 @@ steps:
   - |
     bash ./local/install_deps.bash
     source "$$(python3.11 -m pipenv --venv)/bin/activate"
-    CONFIG_DIR_OVERRIDE=/workspace/clusterfuzz-config python3.11 butler.py package --platform=all
     mkdir /workspace/zips
-    cp -r deployment/* /workspace/zips/.
+    for configpath in /workspace/clusterfuzz-config/configs/*; do
+      configbase=$(basename "$configpath")
+      echo "Running: CONFIG_DIR_OVERRIDE=$${configpath} python3.11 butler.py package --platform=all"
+      CONFIG_DIR_OVERRIDE=$${configpath} python3.11 butler.py package --platform=all
+      mkdir /workspace/zips/$${configbase}
+      cp -r deployment/* /workspace/zips/$${configbase}/.
+      rm -rf deployment/*
+    done
 - name: gcr.io/clusterfuzz-images/base
   entrypoint: bash
   args:
@@ -40,12 +46,14 @@ steps:
     CLUSERFUZZ_CONFIG_HASH=$$(git -C /workspace/clusterfuzz-config rev-parse --short HEAD)
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
     echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
-    for zipfile in /workspace/zips/*; do
-      filename=$(basename "$zipfile")
-      echo "$${zipfile} and $${filename}"
-      echo "gsutil cp $${zipfile} gs:/immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${filename}"
-      gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${filename}
-      echo "uploaded.."
+    for project in /workspace/zips/*; do
+      for zipfile in /workspace/zips/$${project}/*; do
+        filename=$(basename "$zipfile")
+        echo "$${zipfile} and $${filename}"
+        echo "Running: gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${project}/$${filename}"
+        gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${project}/$${filename}
+        echo "uploaded.."
+      done
     done
     
 timeout: 14400s
