@@ -23,6 +23,7 @@
 /coverage
 /deployment
 /clusterfuzz-config
+/zips
 /local/bin/android-sdk/*
 /local/storage
 /paramiko.log
