@@ -67,8 +67,7 @@ steps:
   - |
     source /workspace/cloudbuild.env
     for project in /workspace/zips/*; do
-      projectbase=$(basename $${project})
-      CONFIG_PROJECT=projectbase bash build.sh ${_GIT_HASH}
+      CONFIG_PROJECT=$(basename $${project}) bash build.sh ${_GIT_HASH}
     done
   env:
   - 'IMAGES=
