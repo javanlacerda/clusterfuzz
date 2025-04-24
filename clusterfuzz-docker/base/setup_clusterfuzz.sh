@@ -26,19 +26,6 @@ if [ -z "$HOST_JOB_SELECTION" ]; then
   fi
 fi
 
-CLUSTERFUZZ_FILE=clusterfuzz_package.zip
-# When $LOCAL_SRC is set, use source zip on mounted volume for local testing.
-if [[ -z "$LOCAL_SRC" ]]; then
-  # Set up ClusterFuzz
-  if [[ -d clusterfuzz ]]; then
-    rm -rf clusterfuzz
-  fi
-
-  # DEPLOYMENT_ZIP might be test-deployment/linux-3.zip, so we do not extract DEPLOYMENT_ZIP directly
-  gsutil cp gs://$DEPLOYMENT_BUCKET/$DEPLOYMENT_ZIP $CLUSTERFUZZ_FILE
-  unzip -q -o $CLUSTERFUZZ_FILE
-fi
-
 # Some configurations (e.g. hosts) run many instances of ClusterFuzz. Don't
 # set up mounts in this case.
 if [[ -z "$DISABLE_MOUNTS" ]]; then

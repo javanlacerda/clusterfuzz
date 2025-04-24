@@ -44,6 +44,8 @@ steps:
     sudo apt install git -y
     CLUSTERFUZZ_HASH=$$(git rev-parse --short HEAD)
     CLUSERFUZZ_CONFIG_HASH=$$(git -C /workspace/clusterfuzz-config rev-parse --short HEAD)
+    echo "CLUSTERFUZZ_HASH=$CLUSTERFUZZ_HASH" >> /workspace/cloudbuild.env
+    echo "CLUSERFUZZ_CONFIG_HASH=$CLUSERFUZZ_CONFIG_HASH" >> /workspace/cloudbuild.env
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
     echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
     for project in /workspace/zips/*; do
@@ -56,7 +58,128 @@ steps:
         echo "uploaded.."
       done
     done
-    
+
+- id: build-base-images
+  name: gcr.io/cloud-builders/docker
+  entrypoint: bash
+  args:
+  - -c
+  - |
+    source /workspace/cloudbuild.env
+    for project in /workspace/zips/*; do
+      projectbase=$(basename $${project})
+      CONFIG_PROJECT=projectbase bash build.sh ${_GIT_HASH}
+    done
+  env:
+  - 'IMAGES=
+      gcr.io/clusterfuzz-images-immutable/base:base
+      gcr.io/clusterfuzz-images-immutable/high-end:high-end'
+# - id: build-chrome-images
+#   name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args:
+#   - -c
+#   - |
+#     source /workspace/cloudbuild.env
+#     if [[ -n "$${CHROME_CHANGED}" || -n "$${BASE_CHANGED}" ]]; then
+#       echo "CHROME_CHANGED is set to: $${CHROME_CHANGED}"
+#       bash build.sh ${_GIT_HASH}
+#     else
+#         echo "CHROME_CHANGED is empty or not set."
+#     fi    
+#   env:
+#   - 'IMAGES=
+#       gcr.io/clusterfuzz-images-immutable/chromium/base:chromium/base
+#       gcr.io/clusterfuzz-images-immutable/chromium/builder:chromium/builder
+#       gcr.io/clusterfuzz-images-immutable/chromium/high-end:chromium/high-end
+#       gcr.io/clusterfuzz-images-immutable/chromium/tester:chromium/tester
+#       gcr.io/clusterfuzz-images-immutable/chromium/tests-syncer:chromium/tests-syncer'
+# - id: build-oss-fuzz-images
+#   name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args:
+#   - -c
+#   - |
+#     source /workspace/cloudbuild.env
+#     if [[ -n "$${OSS_FUZZ_CHANGED}" || -n "$${BASE_CHANGED}" ]]; then
+#       echo "OSS_FUZZ_CHANGED is set to: $${OSS_FUZZ_CHANGED}"
+#       bash build.sh ${_GIT_HASH}
+#     else
+#         echo "OSS_FUZZ_CHANGED is empty or not set."
+#     fi    
+#   env:
+#   - 'IMAGES=
+#       gcr.io/clusterfuzz-images-immutable/oss-fuzz/base:oss-fuzz/base
+#       gcr.io/clusterfuzz-images-immutable/oss-fuzz/host:oss-fuzz/host
+#       gcr.io/clusterfuzz-images-immutable/oss-fuzz/host-high-end:oss-fuzz/host-high-end
+#       gcr.io/clusterfuzz-images-immutable/oss-fuzz/worker:oss-fuzz/worker'
+# - id: build-ci-images
+#   name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args:
+#   - -c
+#   - |
+#     source /workspace/cloudbuild.env
+#     if [[ -n "$${CI_CHANGED}" || -n "$${BASE_CHANGED}" ]]; then
+#       echo "CI_CHANGED is set to: $${CI_CHANGED}"
+#       bash build.sh ${_GIT_HASH}
+#     else
+#         echo "CI_CHANGED is empty or not set."
+#     fi    
+#   env:
+#   - 'IMAGES=
+#       gcr.io/clusterfuzz-images-immutable/ci:ci'
+# - id: build-workers-images
+#   name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args:
+#   - -c
+#   - |
+#     source /workspace/cloudbuild.env
+#     if [[ -n "$${WORKERS_CHANGED}" || -n "$${BASE_CHANGED}" ]]; then
+#       echo "WORKERS_CHANGED is set to: $${WORKERS_CHANGED}"
+#       bash build.sh ${_GIT_HASH}
+#     else
+#         echo "WORKERS_CHANGED is empty or not set."
+#     fi    
+#   env:
+#   - 'IMAGES=
+#       gcr.io/clusterfuzz-images-immutable/utask-main-scheduler:utask-main-scheduler
+#       gcr.io/clusterfuzz-images-immutable/tworker:tworker'
+# - id: build-fuchsia-images
+#   name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args:
+#   - -c
+#   - |
+#     source /workspace/cloudbuild.env
+#     if [[ -n "$${FUCHSIA_CHANGED}" || -n "$${BASE_CHANGED}" ]]; then
+#       echo "FUCHSIA_CHANGED is set to: $${FUCHSIA_CHANGED}"
+#       bash build.sh ${_GIT_HASH}
+#     else
+#         echo "FUCHSIA_CHANGED is empty or not set."
+#     fi    
+#   env:
+#   - 'IMAGES=
+#       gcr.io/clusterfuzz-images-immutable/fuchsia:fuchsia'
+# - id: build-google3-images
+#   name: gcr.io/cloud-builders/docker
+#   entrypoint: bash
+#   args:
+#   - -c
+#   - |
+#     source /workspace/cloudbuild.env
+#     if [[ -n "$${GOOGLE_CHANGED}" || -n "$${BASE_CHANGED}" ]]; then
+#       echo "GOOGLE_CHANGED is set to: $${GOOGLE_CHANGED}"
+#       bash build.sh ${_GIT_HASH}
+#     else
+#         echo "GOOGLE_CHANGED is empty or not set."
+#     fi    
+#   env:
+#   - 'IMAGES=
+#       gcr.io/google.com/cluster-fuzz-immutable/base:google/base
+#       gcr.io/google.com/cluster-fuzz-immutable/android-emulator:google/android-emulator
+#       gcr.io/google.com/cluster-fuzz-immutable/android-cuttlefish:google/android-cuttlefish'
 timeout: 14400s
 options:
   machineType: E2_HIGHCPU_32

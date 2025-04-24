@@ -19,17 +19,10 @@ function docker_push {
   docker push $image:$stamp
 }
 
-if [ -z "$1" ]; then
-  GIT_HASH=`git rev-parse HEAD | head -c7`
-else
-  GIT_HASH=$1
-fi
-
 echo $IMAGES
-
 read -ra image_array -d $'\n' <<< "$IMAGES"
 
-stamp=$GIT_HASH-$(date -u +%Y%m%d%H%M)
+stamp=$CLUSTERFUZZ_HASH-$CLUSERFUZZ_CONFIG_HASH-$(date -u +%Y%m%d%H%M)
 for image_and_path in "${image_array[@]}"; do
   IFS=: read -r image path <<< $image_and_path
   docker build -t $image $path
