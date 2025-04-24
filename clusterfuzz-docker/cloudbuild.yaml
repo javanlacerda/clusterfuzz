@@ -44,8 +44,8 @@ steps:
     sudo apt install git -y
     CLUSTERFUZZ_HASH=$$(git rev-parse --short HEAD)
     CLUSERFUZZ_CONFIG_HASH=$$(git -C /workspace/clusterfuzz-config rev-parse --short HEAD)
-    echo "CLUSTERFUZZ_HASH=$$CLUSTERFUZZ_HASH" >> /workspace/cloudbuild.env
-    echo "CLUSERFUZZ_CONFIG_HASH=$$CLUSERFUZZ_CONFIG_HASH" >> /workspace/cloudbuild.env
+    echo "CLUSTERFUZZ_HASH=$${CLUSTERFUZZ_HASH}" >> /workspace/cloudbuild.env
+    echo "CLUSERFUZZ_CONFIG_HASH=$${CLUSERFUZZ_CONFIG_HASH}" >> /workspace/cloudbuild.env
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
     echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
     for project in /workspace/zips/*; do
