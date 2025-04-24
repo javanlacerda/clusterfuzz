@@ -43,18 +43,18 @@ steps:
   - |
     sudo apt install git -y
     CLUSTERFUZZ_HASH=$$(git rev-parse --short HEAD)
-    CLUSERFUZZ_CONFIG_HASH=$$(git -C /workspace/clusterfuzz-config rev-parse --short HEAD)
+    CLUSTERFUZZ_CONFIG_HASH=$$(git -C /workspace/clusterfuzz-config rev-parse --short HEAD)
     echo "CLUSTERFUZZ_HASH=$${CLUSTERFUZZ_HASH}" >> /workspace/cloudbuild.env
-    echo "CLUSERFUZZ_CONFIG_HASH=$${CLUSERFUZZ_CONFIG_HASH}" >> /workspace/cloudbuild.env
+    echo "CLUSTERFUZZ_CONFIG_HASH=$${CLUSTERFUZZ_CONFIG_HASH}" >> /workspace/cloudbuild.env
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
-    echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
+    echo "clusterfuzz-config hash $${CLUSTERFUZZ_CONFIG_HASH}"
     for project in /workspace/zips/*; do
       projectbase=$(basename $${project})
       for zipfile in $${project}/*; do
         filename=$(basename "$zipfile")
         echo "$${zipfile} and $${filename}"
-        echo "Running: gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${projectbase}/$${filename}"
-        gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSERFUZZ_CONFIG_HASH}/$${projectbase}/$${filename}
+        echo "Running: gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSTERFUZZ_CONFIG_HASH}/$${projectbase}/$${filename}"
+        gsutil cp $${zipfile} gs://immutable-artifacts/$${CLUSTERFUZZ_HASH}-$${CLUSTERFUZZ_CONFIG_HASH}/$${projectbase}/$${filename}
         echo "uploaded.."
       done
     done
@@ -68,9 +68,9 @@ steps:
     source /workspace/cloudbuild.env
     cat /workspace/cloudbuild.env
     echo "clusterfuzz hash $${CLUSTERFUZZ_HASH}"
-    echo "clusterfuzz-config hash $${CLUSERFUZZ_CONFIG_HASH}"
+    echo "clusterfuzz-config hash $${CLUSTERFUZZ_CONFIG_HASH}"
     for project in /workspace/zips/*; do
-      CONFIG_PROJECT=$(basename $${project}) bash build.sh ${_GIT_HASH}
+      CONFIG_PROJECT=$(basename $${project}) CLUSTERFUZZ_HASH=$${CLUSTERFUZZ_HASH} CLUSTERFUZZ_CONFIG_HASH=$${CLUSTERFUZZ_CONFIG_HASH} bash build.sh ${_GIT_HASH}
     done
   env:
   - 'IMAGES=

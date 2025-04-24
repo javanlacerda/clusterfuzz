@@ -22,11 +22,11 @@ function docker_push {
 echo $IMAGES
 echo CONFIG_PROJECT: $CONFIG_PROJECT
 echo CLUSTERFUZZ_HASH: $CLUSTERFUZZ_HASH
-echo CLUSERFUZZ_CONFIG_HASH: $CLUSERFUZZ_CONFIG_HASH
+echo CLUSTERFUZZ_CONFIG_HASH: $CLUSTERFUZZ_CONFIG_HASH
 
 read -ra image_array -d $'\n' <<< "$IMAGES"
 
-stamp=$CLUSTERFUZZ_HASH-$CLUSERFUZZ_CONFIG_HASH-$(date -u +%Y%m%d%H%M)
+stamp=$CLUSTERFUZZ_HASH-$CLUSTERFUZZ_CONFIG_HASH-$(date -u +%Y%m%d%H%M)
 for image_and_path in "${image_array[@]}"; do
   IFS=: read -r image path <<< $image_and_path
   docker build --build-arg CONFIG_PROJECT=$CONFIG_PROJECT -t $image $path
