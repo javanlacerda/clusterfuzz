@@ -25,6 +25,7 @@ echo CLUSTERFUZZ_HASH: $CLUSTERFUZZ_HASH
 echo CLUSTERFUZZ_CONFIG_HASH: $CLUSTERFUZZ_CONFIG_HASH
 
 read -ra image_array -d $'\n' <<< "$IMAGES"
+ls /workspace/zips/$CONFIG_PROJECT/.
 
 stamp=$CLUSTERFUZZ_HASH-$CLUSTERFUZZ_CONFIG_HASH-$(date -u +%Y%m%d%H%M)
 for image_and_path in "${image_array[@]}"; do
