@@ -19,7 +19,7 @@ FROM gcr.io/clusterfuzz-images/base
 
 ARG CONFIG_PROJECT
 
-COPY /workspace/zips/$CONFIG_PROJECT/linux-3.zip /data/
+COPY //workspace/zips/$CONFIG_PROJECT/linux-3.zip /data/
 
 COPY setup_clusterfuzz.sh /data/
 

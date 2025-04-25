@@ -74,8 +74,8 @@ steps:
     done
   env:
   - 'IMAGES=
-      gcr.io/clusterfuzz-images-immutable/base:base
-      gcr.io/clusterfuzz-images-immutable/high-end:high-end'
+      gcr.io/clusterfuzz-images/immutable/base:base
+      gcr.io/clusterfuzz-images/immutable/high-end:high-end'
   dir: 'clusterfuzz-docker'
 # - id: build-chrome-images
 #   name: gcr.io/cloud-builders/docker
