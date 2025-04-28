@@ -30,6 +30,7 @@ ls /workspace/zips/$CONFIG_PROJECT/.
 stamp=$CLUSTERFUZZ_HASH-$CLUSTERFUZZ_CONFIG_HASH-$(date -u +%Y%m%d%H%M)
 for image_and_path in "${image_array[@]}"; do
   IFS=: read -r image path <<< $image_and_path
+  cp /workspace/zips/$CONFIG_PROJECT/linux-3.zip $path
   docker build --build-arg CONFIG_PROJECT=$CONFIG_PROJECT -t $image $path
   docker tag $image $image:$stamp
   docker_push
