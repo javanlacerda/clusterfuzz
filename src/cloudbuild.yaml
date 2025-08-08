@@ -31,3 +31,7 @@ steps:
   - |
     echo "✅ Approval received! Deploying to Production..."
     # Add your production deployment commands here
+
+
+options:
+  logging: CLOUD_LOGGING_ONLY # 
