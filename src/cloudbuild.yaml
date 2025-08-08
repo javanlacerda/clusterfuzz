@@ -13,7 +13,7 @@ steps:
   # Step 2: CORRECTED Manual Approval Step
   # This step only has an 'id' and 'waitFor'.
   # This is the correct way to make the pipeline pause.
-- 
+
 - name: 'gcr.io/cloud-builders/gcloud' # <-- This name is required
   id: 'wait-for-approval'
   waitFor: ['deploy-to-staging', '-']
