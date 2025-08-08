@@ -15,7 +15,7 @@ steps:
   # It also waits for the staging step to finish successfully.
 - name: 'gcr.io/cloud-builders/gcloud' # You must specify a builder name
   id: 'wait-for-approval'
-  waitFor: ['deploy-to-staging', '-']
+  waitFor: ['-']
   entrypoint: 'bash'
   args: ['-c', 'echo "Waiting for production approval..."']
 
