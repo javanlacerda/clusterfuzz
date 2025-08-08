@@ -1,0 +1,33 @@
+steps:
+  # Step 1: Deploy to Staging Environment
+  # This step runs automatically.
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'deploy-to-staging'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    echo "🚀 Deploying to Staging..."
+    # Add your staging deployment commands here
+
+  # Step 2: Wait for Manual Approval
+  # The special 'waitFor: ["-"]' syntax pauses the build.
+  # It also waits for the staging step to finish successfully.
+- name: 'gcr.io/cloud-builders/gcloud' # You must specify a builder name
+  id: 'wait-for-approval'
+  waitFor: ['deploy-to-staging', '-']
+  entrypoint: 'bash'
+  args: ['-c', 'echo "Waiting for production approval..."']
+
+
+  # Step 3: Deploy to Production Environment
+  # This step only runs after the 'wait-for-approval' step is manually approved.
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'deploy-to-production'
+  waitFor: ['wait-for-approval']
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    echo "✅ Approval received! Deploying to Production..."
+    # Add your production deployment commands here
