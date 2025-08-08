@@ -10,15 +10,11 @@ steps:
     echo "🚀 Deploying to Staging..."
     # Add your staging deployment commands here
 
-  # Step 2: Wait for Manual Approval
-  # The special 'waitFor: ["-"]' syntax pauses the build.
-  # It also waits for the staging step to finish successfully.
-- name: 'gcr.io/cloud-builders/gcloud' # You must specify a builder name
-  id: 'wait-for-approval'
-  waitFor: ['-']
-  entrypoint: 'bash'
-  args: ['-c', 'echo "Waiting for production approval..."']
-
+  # Step 2: CORRECTED Manual Approval Step
+  # This step only has an 'id' and 'waitFor'.
+  # This is the correct way to make the pipeline pause.
+- id: 'wait-for-approval'
+  waitFor: ['deploy-to-staging', '-']
 
   # Step 3: Deploy to Production Environment
   # This step only runs after the 'wait-for-approval' step is manually approved.
